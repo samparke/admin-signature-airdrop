@@ -65,6 +65,12 @@ contract AdminAirdrop is EIP712 {
         _hashTypedDataV4(keccak256(abi.encode(MESSAGE_TYPE_HASH, AirdropClaim({account: account, amount: amount}))));
     }
 
+    /**
+     * @notice finds the actual signer who signed the digest with the v, r and s.
+     * @param digest the hash from the getMessageHash. This is the EIP-712 message the admin would have signed to grant an address access to claiming tokens
+     *  the v, r, s is the signature the user is passing into the claim function. If the user passed the correct signature,
+     *  which signed a message which corresponds with the address and claim amount, it is valid.
+     */
     function _isValidSignature(bytes32 digest, uint8 v, bytes32 r, bytes32 s) internal view returns (bool) {
         (address actualSigner,,) = ECDSA.tryRecover(digest, v, r, s);
         return (actualSigner == admin);
