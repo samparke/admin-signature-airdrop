@@ -1,66 +1,14 @@
-## Foundry
+## Admin Airdrop
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+Given the high degree of centralisation — with only the single admin granting access to claiming — this project is heavily flawed.
 
-Foundry consists of:
+However, it was used to practice and understand the role of signatures in airdrops and EIP-721 transactions.
 
-- **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
-- **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
-- **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
-- **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+**Project Features:**
 
-## Documentation
+- Admin generates a digest to allow a user to claim a certain amount of Gold Token. This is done via the getMessageHash() function.
+- The admin then signs the digest.
 
-https://book.getfoundry.sh/
-
-## Usage
-
-### Build
-
-```shell
-$ forge build
-```
-
-### Test
-
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+- The claimer then calls claim(), entering the (v, r, s) — which the admin would provide to the claimer.
+- The contract then validates the signature, which calls \_isValidSignature (which contains ECDSA.tryRecover()). It then compares the actual signer with the admin. If they are the same, we can conclude the admin signed the digest.
+- The user is authorised to claim Gold Tokens in the quantity requested.
