@@ -79,4 +79,8 @@ contract AdminAirdrop is EIP712 {
     function getGoldTokenAddress() external view returns (address) {
         return address(i_goldToken);
     }
+
+    function getAdminAddress() external view returns (address) {
+        return admin;
+    }
 }
